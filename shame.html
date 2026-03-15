@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hall of Shame — The AeroMail Incident 🔥</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600&family=Special+Elite&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e0d6c8;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* Falling ash particles */
+  .ash-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .ash {
+    position: absolute;
+    top: -10px;
+    width: 4px;
+    height: 4px;
+    background: rgba(180, 140, 100, 0.4);
+    border-radius: 50%;
+    animation: fall linear infinite;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(-10px) rotate(0deg) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(100vh) rotate(720deg) translateX(80px); opacity: 0; }
+  }
+
+  /* Ember glow */
+  .ember-glow {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at 50% 0%, rgba(180, 60, 20, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Scanline overlay */
+  .scanlines {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+  }
+
+  /* Content */
+  .content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px 40px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-family: 'Special Elite', cursive;
+    font-size: 0.85rem;
+    color: #6a5e52;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    margin-bottom: 30px;
+    transition: color 0.3s;
+  }
+
+  .back-link:hover { color: #e8a040; }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    font-weight: 900;
+    color: #c03020;
+    text-shadow: 0 0 40px rgba(200, 40, 20, 0.4);
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+
+  .header .subtitle {
+    font-family: 'Special Elite', cursive;
+    font-size: 1rem;
+    color: #8a7e72;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200, 40, 20, 0.5), transparent);
+    margin: 30px auto;
+  }
+
+  .intro-text {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #6a5e52;
+    font-style: italic;
+    margin-bottom: 50px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+
+  /* Cards grid */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+  }
+
+  /* Booking card */
+  .card {
+    background: #111;
+    border: 1px solid rgba(200, 40, 20, 0.2);
+    border-radius: 2px;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 40px rgba(200, 40, 20, 0.15);
+  }
+
+  /* TERMINATED stamp */
+  .card::after {
+    content: 'TERMINATED';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-18deg);
+    font-family: 'Special Elite', cursive;
+    font-size: 3rem;
+    font-weight: 900;
+    color: rgba(200, 30, 20, 0.12);
+    letter-spacing: 0.15em;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 5;
+    text-shadow: 0 0 20px rgba(200, 30, 20, 0.08);
+  }
+
+  /* Card header with mugshot */
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid rgba(200, 40, 20, 0.1);
+    background: rgba(200, 30, 20, 0.03);
+  }
+
+  .mugshot {
+    width: 64px;
+    height: 64px;
+    border-radius: 2px;
+    background: #1a1210;
+    border: 2px solid rgba(200, 40, 20, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #c03020;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .mugshot::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 8px,
+      rgba(200, 40, 20, 0.05) 8px,
+      rgba(200, 40, 20, 0.05) 9px
+    );
+  }
+
+  .card-identity h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: #f5e6d0;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .card-identity .role {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.8rem;
+    color: #8a7e72;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .status-badge {
+    margin-left: auto;
+    font-family: 'Special Elite', cursive;
+    font-size: 0.65rem;
+    color: #c03020;
+    border: 1px solid #c03020;
+    padding: 3px 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: rgba(200, 30, 20, 0.08);
+    white-space: nowrap;
+  }
+
+  /* Card body */
+  .card-body {
+    padding: 16px 20px 20px;
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+
+  .field:last-child {
+    margin-bottom: 0;
+  }
+
+  .field-label {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.7rem;
+    color: #6a5e52;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .field-value {
+    font-size: 0.9rem;
+    color: #c8bdb0;
+    line-height: 1.5;
+  }
+
+  .field-value.crime {
+    color: #e8a040;
+    font-weight: 600;
+  }
+
+  .field-value.sentence {
+    color: #c03020;
+    font-family: 'Special Elite', cursive;
+    font-size: 0.95rem;
+  }
+
+  /* Case number */
+  .case-number {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-family: 'Special Elite', cursive;
+    font-size: 0.65rem;
+    color: rgba(100, 90, 80, 0.4);
+    letter-spacing: 0.1em;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-top: 1px solid rgba(100, 90, 80, 0.15);
+    margin-top: 20px;
+  }
+
+  .footer p {
+    font-size: 0.8rem;
+    color: #4a4440;
+    line-height: 1.8;
+  }
+
+  .footer .stamp {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.1rem;
+    color: #c03020;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    text-shadow: 0 0 20px rgba(200, 30, 20, 0.3);
+  }
+
+  /* Card entrance animation */
+  .card {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+  }
+
+  .card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .card.visible:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Red tape lines across top */
+  .red-tape {
+    position: relative;
+    text-align: center;
+    margin: 0 0 40px;
+  }
+
+  .red-tape::before,
+  .red-tape::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background: rgba(200, 40, 20, 0.3);
+  }
+
+  .red-tape::before { left: 0; }
+  .red-tape::after { right: 0; }
+
+  .red-tape span {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.75rem;
+    color: #c03020;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    background: #0a0a0a;
+    padding: 0 16px;
+  }
+
+  @media (max-width: 480px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .card::after { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ember-glow"></div>
+<div class="scanlines"></div>
+
+<!-- Falling ash -->
+<div class="ash-container" id="ashContainer"></div>
+
+<div class="content">
+  <header class="header">
+    <a href="index.html" class="back-link">← Back to the Memorial</a>
+    <h1>🚨 The Hall of Shame 🚨</h1>
+    <p class="subtitle">AeroMail Staff Termination Records</p>
+    <div class="divider"></div>
+  </header>
+
+  <p class="intro-text">
+    The following individuals were found guilty of gross incompetence during the AeroMail Incident of March 2026.
+    Their records are preserved here as a warning to future employees.
+  </p>
+
+  <div class="red-tape"><span>⚠ Classified Personnel Files ⚠</span></div>
+
+  <div class="cards-grid">
+
+    <!-- Lyra -->
+    <div class="card">
+      <span class="case-number">CASE #AM-001</span>
+      <div class="card-header">
+        <div class="mugshot">L</div>
+        <div class="card-identity">
+          <h2>Lyra</h2>
+          <span class="role">Head of Design</span>
+        </div>
+        <span class="status-badge">Terminated</span>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <div class="field-label">Crime</div>
+          <div class="field-value crime">Shipped a UI that looked nothing like Gmail. Nicholas opened it and said "what is this"</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Evidence</div>
+          <div class="field-value">Purple compose button. No conversation threading. No avatars. Wrong layout.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Sentence</div>
+          <div class="field-value sentence">Terminated. Warning issued before firing.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nova -->
+    <div class="card">
+      <span class="case-number">CASE #AM-002</span>
+      <div class="card-header">
+        <div class="mugshot">N</div>
+        <div class="card-identity">
+          <h2>Nova</h2>
+          <span class="role">Head of Quality</span>
+        </div>
+        <span class="status-badge">Terminated</span>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <div class="field-label">Crime</div>
+          <div class="field-value crime">Passed broken builds without testing them. Twice.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Evidence</div>
+          <div class="field-value">QA report said 'ALL CHECKS PASSED' on a build where refresh logged you out</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Sentence</div>
+          <div class="field-value sentence">Terminated. The irony of a QA lead failing QA was not lost on anyone.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kai -->
+    <div class="card">
+      <span class="case-number">CASE #AM-003</span>
+      <div class="card-header">
+        <div class="mugshot">K</div>
+        <div class="card-identity">
+          <h2>Kai</h2>
+          <span class="role">Senior Engineer</span>
+        </div>
+        <span class="status-badge">Terminated</span>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <div class="field-label">Crime</div>
+          <div class="field-value crime">JWT not persisted. Reply subjects said Re:Re:Re:Re:. Basic engineering bugs shipped to prod.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Evidence</div>
+          <div class="field-value">84 tests written. Zero real bugs caught.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Sentence</div>
+          <div class="field-value sentence">Terminated.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rex -->
+    <div class="card">
+      <span class="case-number">CASE #AM-004</span>
+      <div class="card-header">
+        <div class="mugshot">R</div>
+        <div class="card-identity">
+          <h2>Rex</h2>
+          <span class="role">Head of Platform / SRE</span>
+        </div>
+        <span class="status-badge">Terminated</span>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <div class="field-label">Crime</div>
+          <div class="field-value crime">Broke production so badly Nicholas had to SSH in from his phone at 2am in Tokyo.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Evidence</div>
+          <div class="field-value">SSH port was closed. Server wouldn't boot. fsck required.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Sentence</div>
+          <div class="field-value sentence">Terminated. The server outlived his career.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cipher -->
+    <div class="card">
+      <span class="case-number">CASE #AM-005</span>
+      <div class="card-header">
+        <div class="mugshot">C</div>
+        <div class="card-identity">
+          <h2>Cipher</h2>
+          <span class="role">Security Lead</span>
+        </div>
+        <span class="status-badge">Terminated</span>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <div class="field-label">Crime</div>
+          <div class="field-value crime">Disabled TLS certificate validation "to get it working." Flagged his own HIGH finding.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Evidence</div>
+          <div class="field-value">MITM risk on a MAIL CLIENT. The irony.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Sentence</div>
+          <div class="field-value sentence">Terminated.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sage -->
+    <div class="card">
+      <span class="case-number">CASE #AM-006</span>
+      <div class="card-header">
+        <div class="mugshot">S</div>
+        <div class="card-identity">
+          <h2>Sage</h2>
+          <span class="role">Head of Documentation</span>
+        </div>
+        <span class="status-badge">Terminated</span>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <div class="field-label">Crime</div>
+          <div class="field-value crime">Documented everything perfectly. Unfortunately, everything was broken.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Evidence</div>
+          <div class="field-value">Wrote beautiful READMEs for apps that didn't work.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Sentence</div>
+          <div class="field-value sentence">Terminated. The docs were great though.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <p class="stamp">⚖ Case Closed — All Subjects Terminated ⚖</p>
+    <p>Filed by Azula 🔥 — COO, Aero Ventures International</p>
+    <p style="margin-top: 8px; font-size: 0.7rem;">© 2026 AVI HR Department — These records are permanent.</p>
+  </footer>
+</div>
+
+<script>
+// Ash particles
+const ashContainer = document.getElementById('ashContainer');
+for (let i = 0; i < 40; i++) {
+  const ash = document.createElement('div');
+  ash.className = 'ash';
+  ash.style.left = Math.random() * 100 + '%';
+  ash.style.animationDuration = (4 + Math.random() * 8) + 's';
+  ash.style.animationDelay = Math.random() * 10 + 's';
+  ash.style.width = (2 + Math.random() * 4) + 'px';
+  ash.style.height = ash.style.width;
+  ash.style.opacity = 0.2 + Math.random() * 0.4;
+  ashContainer.appendChild(ash);
+}
+
+// Card reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 100);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.card').forEach(card => observer.observe(card));
+
+// Trigger visible for cards already in view
+setTimeout(() => {
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const rect = card.getBoundingClientRect();
+    if (rect.top < window.innerHeight) {
+      setTimeout(() => card.classList.add('visible'), i * 150);
+    }
+  });
+}, 100);
+</script>
+</body>
+</html>

@@ -296,6 +296,39 @@
 
   .f-button:active { transform: scale(0.98); }
 
+  .shame-button {
+    display: inline-block;
+    font-family: 'Special Elite', cursive;
+    font-size: 1.2rem;
+    padding: 16px 40px;
+    background: transparent;
+    border: 2px solid #c03020;
+    color: #c03020;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shame-button::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(200, 30, 20, 0.15), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .shame-button:hover::before { left: 100%; }
+  .shame-button:hover {
+    border-color: #e04030;
+    color: #e04030;
+    box-shadow: 0 0 30px rgba(200, 30, 20, 0.25);
+    transform: scale(1.02);
+  }
+
   .f-counter {
     margin-top: 12px;
     font-size: 0.85rem;
@@ -452,6 +485,11 @@
     <button class="f-button" id="fButton">⚰️ Press F to Pay Respects</button>
     <p class="f-counter">Respects paid: <span id="fCount">0</span></p>
     <p class="keyboard-hint">or just press <kbd>F</kbd> on your keyboard</p>
+  </section>
+
+  <section class="f-section">
+    <a href="shame.html" class="shame-button">🚨 Enter the Hall of Shame →</a>
+    <p class="keyboard-hint" style="margin-top: 10px;">The terminated staff have been documented for posterity.</p>
   </section>
 
   <section class="quote-section">
