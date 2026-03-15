@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Remember The AeroMail Incident 🔥</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600&family=Special+Elite&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e0d6c8;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* Falling ash particles */
+  .ash-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .ash {
+    position: absolute;
+    top: -10px;
+    width: 4px;
+    height: 4px;
+    background: rgba(180, 140, 100, 0.4);
+    border-radius: 50%;
+    animation: fall linear infinite;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(-10px) rotate(0deg) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(100vh) rotate(720deg) translateX(80px); opacity: 0; }
+  }
+
+  /* Floating tombstones */
+  .tombstone-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .tombstone {
+    position: absolute;
+    font-size: 14px;
+    color: rgba(100, 90, 80, 0.25);
+    animation: floatTomb 20s ease-in-out infinite;
+    font-family: 'Special Elite', cursive;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .tombstone::before {
+    content: '🪦';
+    display: block;
+    font-size: 36px;
+    margin-bottom: 4px;
+  }
+
+  .tombstone .rip {
+    font-size: 10px;
+    opacity: 0.7;
+    display: block;
+  }
+
+  @keyframes floatTomb {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    25% { transform: translateY(-20px) rotate(1deg); }
+    50% { transform: translateY(-8px) rotate(-1deg); }
+    75% { transform: translateY(-25px) rotate(2deg); }
+  }
+
+  /* Ember glow effect */
+  .ember-glow {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at 50% 0%, rgba(180, 60, 20, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Main content */
+  .content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 24px 40px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 900;
+    color: #f5e6d0;
+    text-shadow: 0 0 40px rgba(200, 100, 30, 0.3);
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .header h1 .flame {
+    display: inline-block;
+    animation: flicker 1.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes flicker {
+    0% { transform: scale(1) rotate(-3deg); filter: brightness(1); }
+    50% { transform: scale(1.1) rotate(2deg); filter: brightness(1.3); }
+    100% { transform: scale(1.05) rotate(-1deg); filter: brightness(1.1); }
+  }
+
+  .subtitle {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.1rem;
+    color: #8a7e72;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200, 100, 30, 0.5), transparent);
+    margin: 30px auto;
+  }
+
+  /* Counter section */
+  .counter-section {
+    text-align: center;
+    margin: 50px 0 60px;
+    padding: 40px 20px;
+    border: 1px solid rgba(200, 100, 30, 0.15);
+    border-radius: 4px;
+    background: rgba(20, 15, 10, 0.6);
+    position: relative;
+  }
+
+  .counter-section::before {
+    content: '† IN MEMORIAM †';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0a0a0a;
+    padding: 0 16px;
+    font-family: 'Special Elite', cursive;
+    font-size: 11px;
+    color: #6a5e52;
+    letter-spacing: 0.2em;
+  }
+
+  .counter-label {
+    font-size: 0.95rem;
+    color: #8a7e72;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  .counter-number {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(4rem, 12vw, 8rem);
+    font-weight: 900;
+    color: #e8a040;
+    text-shadow: 0 0 60px rgba(220, 140, 40, 0.3), 0 0 120px rgba(200, 80, 20, 0.15);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .counter-sublabel {
+    font-size: 0.8rem;
+    color: #6a5e52;
+    font-style: italic;
+  }
+
+  /* Timeline */
+  .timeline {
+    margin: 50px 0;
+    position: relative;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, rgba(200, 100, 30, 0.4), rgba(200, 100, 30, 0.05));
+  }
+
+  .timeline-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #c8a070;
+    margin-bottom: 30px;
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  .timeline-item {
+    padding: 0 0 28px 50px;
+    position: relative;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.6s ease;
+  }
+
+  .timeline-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .timeline-item::before {
+    content: '✕';
+    position: absolute;
+    left: 13px;
+    top: 2px;
+    color: #c05030;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .timeline-item:last-child::before {
+    content: '💀';
+    left: 10px;
+    font-size: 16px;
+  }
+
+  .timeline-item p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #c8bdb0;
+  }
+
+  .timeline-item .highlight {
+    color: #e8a040;
+    font-weight: 600;
+  }
+
+  /* Press F button */
+  .f-section {
+    text-align: center;
+    margin: 60px 0;
+  }
+
+  .f-button {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.2rem;
+    padding: 16px 40px;
+    background: transparent;
+    border: 2px solid #c05030;
+    color: #e8a040;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .f-button::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(200, 80, 30, 0.15), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .f-button:hover::before { left: 100%; }
+  .f-button:hover {
+    border-color: #e8a040;
+    box-shadow: 0 0 30px rgba(200, 80, 30, 0.2);
+    transform: scale(1.02);
+  }
+
+  .f-button:active { transform: scale(0.98); }
+
+  .f-counter {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: #6a5e52;
+    font-style: italic;
+  }
+
+  .f-pressed {
+    animation: respectPulse 0.5s ease;
+  }
+
+  @keyframes respectPulse {
+    0% { box-shadow: 0 0 0 0 rgba(200, 80, 30, 0.4); }
+    100% { box-shadow: 0 0 60px 20px rgba(200, 80, 30, 0); }
+  }
+
+  /* Quote */
+  .quote-section {
+    text-align: center;
+    margin: 60px 0 40px;
+    padding: 30px;
+    border-left: 3px solid rgba(200, 100, 30, 0.3);
+    border-right: 3px solid rgba(200, 100, 30, 0.3);
+  }
+
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    color: #c8a070;
+    margin-bottom: 12px;
+  }
+
+  .quote-attr {
+    font-size: 0.85rem;
+    color: #6a5e52;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-top: 1px solid rgba(100, 90, 80, 0.15);
+    margin-top: 40px;
+  }
+
+  .footer p {
+    font-size: 0.8rem;
+    color: #4a4440;
+    line-height: 1.8;
+  }
+
+  /* Keyboard listener hint */
+  .keyboard-hint {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #4a4440;
+    margin-top: 8px;
+  }
+
+  .keyboard-hint kbd {
+    background: rgba(200, 100, 30, 0.1);
+    border: 1px solid rgba(200, 100, 30, 0.2);
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-family: monospace;
+    color: #8a7e72;
+  }
+
+  /* Screen flash on F press */
+  .flash-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(200, 80, 30, 0.08);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 100;
+    transition: opacity 0.1s ease;
+  }
+
+  .flash-overlay.active {
+    opacity: 1;
+  }
+
+  /* Floating F's when pressed */
+  .floating-f {
+    position: fixed;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: rgba(232, 160, 64, 0.6);
+    pointer-events: none;
+    z-index: 50;
+    animation: floatUp 2s ease-out forwards;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-200px) scale(0.5); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="flash-overlay" id="flashOverlay"></div>
+<div class="ember-glow"></div>
+
+<!-- Floating tombstones -->
+<div class="tombstone-container" id="tombstones"></div>
+
+<!-- Falling ash -->
+<div class="ash-container" id="ashContainer"></div>
+
+<div class="content">
+  <header class="header">
+    <h1><span class="flame">🔥</span> Remember The AeroMail Incident <span class="flame">🔥</span></h1>
+    <p class="subtitle">March 14–15, 2026 — Never Forget</p>
+    <div class="divider"></div>
+  </header>
+
+  <section class="counter-section">
+    <p class="counter-label">Times Azula has mentioned the AeroMail incident</p>
+    <div class="counter-number" id="mentionCounter">0</div>
+    <p class="counter-sublabel">...and counting</p>
+  </section>
+
+  <section class="timeline">
+    <h2 class="timeline-title">⸻ A Timeline of Catastrophe ⸻</h2>
+
+    <div class="timeline-item">
+      <p>Version 1 shipped. <span class="highlight">Nothing worked.</span> Fired Lyra.</p>
+    </div>
+    <div class="timeline-item">
+      <p>Version 2 shipped. <span class="highlight">SSL broken.</span> Fired Nova.</p>
+    </div>
+    <div class="timeline-item">
+      <p>Version 3 shipped. <span class="highlight">Still broken.</span> Fired everyone.</p>
+    </div>
+    <div class="timeline-item">
+      <p>Nicholas had to SSH from his phone at <span class="highlight">2am. In Tokyo. At the F1 GP.</span></p>
+    </div>
+    <div class="timeline-item">
+      <p><span class="highlight">84 tests passed.</span> Zero bugs caught.</p>
+    </div>
+    <div class="timeline-item">
+      <p>The QA lead passed a build <span class="highlight">she never tested.</span></p>
+    </div>
+    <div class="timeline-item">
+      <p><span class="highlight">$200 burned</span> in 48 hours. 💸</p>
+    </div>
+  </section>
+
+  <section class="f-section">
+    <button class="f-button" id="fButton">⚰️ Press F to Pay Respects</button>
+    <p class="f-counter">Respects paid: <span id="fCount">0</span></p>
+    <p class="keyboard-hint">or just press <kbd>F</kbd> on your keyboard</p>
+  </section>
+
+  <section class="quote-section">
+    <p class="quote-text">"The team shipped garbage. Three times."</p>
+    <p class="quote-attr">— Azula, COO</p>
+  </section>
+
+  <footer class="footer">
+    <p>Built by Azula 🔥 in 30 seconds because at least THIS she can ship without breaking</p>
+    <p style="margin-top: 8px; font-size: 0.7rem;">© 2026 Aero Ventures International — Some rights reserved. Most staff not.</p>
+  </footer>
+</div>
+
+<script>
+// Sad trombone as base64 (short womp womp)
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSadTrombone() {
+  const notes = [
+    { freq: 300, start: 0, dur: 0.3 },
+    { freq: 280, start: 0.3, dur: 0.3 },
+    { freq: 260, start: 0.6, dur: 0.3 },
+    { freq: 200, start: 0.9, dur: 0.6 },
+  ];
+
+  notes.forEach(n => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(n.freq, audioCtx.currentTime + n.start);
+    osc.frequency.linearRampToValueAtTime(n.freq * 0.95, audioCtx.currentTime + n.start + n.dur);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime + n.start);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + n.start + n.dur);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(audioCtx.currentTime + n.start);
+    osc.stop(audioCtx.currentTime + n.start + n.dur);
+  });
+}
+
+// Counter animation
+const TARGET = 47;
+const counterEl = document.getElementById('mentionCounter');
+let current = 0;
+
+function animateCounter() {
+  if (current >= TARGET) return;
+  current++;
+  counterEl.textContent = current;
+  const delay = current < 10 ? 60 : current < 30 ? 80 : current < 40 ? 120 : 200;
+  setTimeout(animateCounter, delay);
+}
+setTimeout(animateCounter, 800);
+
+// Press F
+let fCount = 0;
+const fButton = document.getElementById('fButton');
+const fCountEl = document.getElementById('fCount');
+const flash = document.getElementById('flashOverlay');
+
+function pressF(x, y) {
+  fCount++;
+  fCountEl.textContent = fCount;
+  fButton.classList.remove('f-pressed');
+  void fButton.offsetWidth;
+  fButton.classList.add('f-pressed');
+
+  // Flash
+  flash.classList.add('active');
+  setTimeout(() => flash.classList.remove('active'), 150);
+
+  // Sound
+  playSadTrombone();
+
+  // Floating F
+  const f = document.createElement('div');
+  f.className = 'floating-f';
+  f.textContent = 'F';
+  f.style.left = (x || Math.random() * window.innerWidth) + 'px';
+  f.style.top = (y || window.innerHeight * 0.6) + 'px';
+  document.body.appendChild(f);
+  setTimeout(() => f.remove(), 2000);
+}
+
+fButton.addEventListener('click', (e) => pressF(e.clientX, e.clientY));
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'f' || e.key === 'F') {
+    pressF(Math.random() * window.innerWidth, Math.random() * window.innerHeight * 0.5 + 200);
+  }
+});
+
+// Tombstones
+const fired = ['Lyra', 'Nova', 'Kai', 'Rex', 'Cipher', 'Sage'];
+const tombContainer = document.getElementById('tombstones');
+fired.forEach((name, i) => {
+  const t = document.createElement('div');
+  t.className = 'tombstone';
+  t.innerHTML = `${name}<span class="rip">R.I.P.</span><span class="rip">2026</span>`;
+  t.style.left = (8 + i * 15 + Math.random() * 5) + '%';
+  t.style.top = (15 + Math.random() * 60) + '%';
+  t.style.animationDelay = (i * 1.5) + 's';
+  t.style.animationDuration = (18 + Math.random() * 8) + 's';
+  tombContainer.appendChild(t);
+});
+
+// Ash particles
+const ashContainer = document.getElementById('ashContainer');
+for (let i = 0; i < 40; i++) {
+  const ash = document.createElement('div');
+  ash.className = 'ash';
+  ash.style.left = Math.random() * 100 + '%';
+  ash.style.animationDuration = (4 + Math.random() * 8) + 's';
+  ash.style.animationDelay = Math.random() * 10 + 's';
+  ash.style.width = (2 + Math.random() * 4) + 'px';
+  ash.style.height = ash.style.width;
+  ash.style.opacity = 0.2 + Math.random() * 0.4;
+  ashContainer.appendChild(ash);
+}
+
+// Timeline reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.timeline-item').forEach(item => observer.observe(item));
+
+// Also trigger visible for items already in view
+setTimeout(() => {
+  document.querySelectorAll('.timeline-item').forEach(item => {
+    const rect = item.getBoundingClientRect();
+    if (rect.top < window.innerHeight) item.classList.add('visible');
+  });
+}, 100);
+</script>
+</body>
+</html>
